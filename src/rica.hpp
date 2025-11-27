@@ -13,10 +13,10 @@ class Collider2DSystem;
 class RenderSystem;
 class AudioSystem;
 
-#include "lib/raylib/src/raylib.h"
-#include "lib/raylib/src/raymath.h"
+#include <raylib.h>
+#include <raymath.h>
 
-#include "lib/rapidjson1/rapidjson/document.h"
+#include <rapidjson/document.h>
 
 #include <memory>
 #include <string>

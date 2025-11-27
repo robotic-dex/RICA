@@ -1,7 +1,7 @@
 #pragma once
-#include "../../../../lib/raylib/src/raylib.h"
-#include "../../../../lib/raylib/src/raymath.h"
 #include "../../Component.hpp"
+#include <raylib.h>
+#include <raymath.h>
 
 class Camera2DComponent : public Component {
 public:

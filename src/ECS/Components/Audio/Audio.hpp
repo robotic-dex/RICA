@@ -1,8 +1,8 @@
 #pragma once
 #include "../../../Logger/Logger.hpp"
-#include "../../../lib/raylib/src/raylib.h"
-#include "../../../lib/raylib/src/raymath.h"
 #include "../Component.hpp"
+#include <raylib.h>
+#include <raymath.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
