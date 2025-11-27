@@ -4,12 +4,7 @@
 
 #include <cstddef>
 #include <fstream>
-#include <initializer_list>
-#include <iostream>
-#include <optional>
-#include <ostream>
 #include <string> // Добавлен для std::stoi
-#include <thread>
 
 // Глобальная переменная движка (Engine Singleton)
 Engine& engine = Engine::getInstance();
@@ -72,19 +67,17 @@ struct RayLibVar {
   unsigned int flag = 0;
 };
 
-RayLibVar parseInitFileForRayLib() {
+std::optional<RayLibVar> parseInitFileForRayLib() {
   RayLibVar rayVar;
   rayVar.flag = 0;
   rapidjson::Document doc;
 
-  RayLibVar error = {0, 0, "error", 1, false};
-
   if (!parseInitFile(doc))
-    return error; // Используем вспомогательную функцию
+    return {};
 
   // Ранний выход, если нет корневого объекта "rayLib"
   if (!doc.HasMember("rayLib") || !doc["rayLib"].IsObject())
-    return error;
+    return {};
 
   const rapidjson::Value& config = doc["rayLib"];
 
@@ -137,7 +130,9 @@ bool Engine::init() {
 
   isRunning = true;
   auto var = parseInitFileForRayLib();
-  if (var.title == "error")
+  // можно использовать var.has_value(), но лучше оставить так для
+  // читабельности
+  if (!var)
     return false;
   return true;
 }

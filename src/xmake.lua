@@ -32,5 +32,5 @@ target("EngineLib")
         "UI/"
     )
 
-    add_packages("raylib", "rapidjson")
+    add_packages("raylib", "rapidjson", "tl_expected")
 target_end()
