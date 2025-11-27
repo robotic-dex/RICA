@@ -20,7 +20,7 @@ public:
   }
 
   void update();
-  void init();
+  bool init();
   bool getIsRunning() {
     return isRunning;
   }
@@ -78,7 +78,7 @@ private:
   float deltaTime = 0.0f;
 };
 
-void gameStart();
+bool gameStart();
 
 extern Engine& engine;
 

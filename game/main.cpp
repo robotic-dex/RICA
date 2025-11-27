@@ -18,8 +18,10 @@ class World;
 class RenderSystem;
 class Log;
 enum LogLevel;
-void gameStart() {
-  engine.init();
+bool gameStart() {
+  if (!engine.init())
+    return false;
   engine.sceneManager.setSceneLimit(10);
   engine.sceneManager.CreateScene<GameScene>(1);
+  return true;
 }

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <initializer_list>
 #include <iostream>
+#include <optional>
 #include <ostream>
 #include <string> // Добавлен для std::stoi
 #include <thread>
@@ -32,8 +33,8 @@ bool parseInitFile(rapidjson::Document& doc) {
   }
   return true;
 }
-unsigned int GetFlagValue(const char* flagName) {
 
+unsigned int GetFlagValue(const char* flagName) {
   if (strcmp(flagName, "FLAG_FULLSCREEN_MODE") == 0)
     return FLAG_FULLSCREEN_MODE;
   if (strcmp(flagName, "FLAG_WINDOW_RESIZABLE") == 0)
@@ -66,10 +67,11 @@ unsigned int GetFlagValue(const char* flagName) {
 struct RayLibVar {
   int width = 200;
   int height = 400;
-  const char* title = "Default Game Title";
+  std::string title = "Default Game Title";
   int maxFPS = 60;
   unsigned int flag = 0;
 };
+
 RayLibVar parseInitFileForRayLib() {
   RayLibVar rayVar;
   rayVar.flag = 0;
@@ -121,22 +123,28 @@ RayLibVar parseInitFileForRayLib() {
       }
     }
   }
+
   SetConfigFlags(rayVar.flag);
-  InitWindow(rayVar.width, rayVar.height, rayVar.title);
+  InitWindow(rayVar.width, rayVar.height, rayVar.title.c_str());
   SetTargetFPS(rayVar.maxFPS);
 
   return rayVar;
 }
 
-void Engine::init() {
+bool Engine::init() {
   SetTraceLogLevel(LOG_ALL);
   InitAudioDevice();
 
   isRunning = true;
-  parseInitFileForRayLib();
+  auto var = parseInitFileForRayLib();
+  if (var.title == "error")
+    return false;
+  return true;
 }
+
 void Engine::update() {
 }
+
 void Engine::deleteVectorSceneManager() {
   for (size_t i = 0; i < vectorSceneManager.size(); i++) {
     if (vectorSceneManager[i] != nullptr) {
@@ -145,6 +153,7 @@ void Engine::deleteVectorSceneManager() {
     }
   }
 }
+
 void Engine::shutdown() {
   CloseWindow();
 }
@@ -212,7 +221,8 @@ void Engine::SceneManager::setSceneLimit(unsigned int limit) {
 int main() {
   logger.addLog(LogLevel::DEBUG, "main", "logRica.txt");
 
-  gameStart();
+  if (!gameStart())
+    return 1;
 
   while (engine.getIsRunning() && !WindowShouldClose()) {
     engine.deltaTime = GetFrameTime();
