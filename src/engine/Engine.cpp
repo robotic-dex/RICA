@@ -156,7 +156,7 @@ void Engine::deleteVectorSceneManager() {
 
 void Engine::shutdown() {
   CloseWindow();
-  UnloadShader(engine.shader);
+  engine.shader = {}; // deletes the shader, unloading it
 }
 
 std::vector<std::shared_ptr<Scene>> Engine::vectorSceneManager;
@@ -263,7 +263,7 @@ int main() {
 
     // Финальная отрисовка буфера на экран (здесь можно добавить шейдер)
     if (targetTexture.id > 0) {
-      BeginShaderMode(engine.shader);
+      BeginShaderMode(engine.shader->getRaylibShader());
 
         DrawTextureRec(
             targetTexture.texture,

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "Shader.hpp"
 #include <memory>
 #include <shared_mutex>
 #include <vector>
@@ -43,7 +44,7 @@ public:
     return deltaTime;
   }
 
-  Shader& getShader() {
+  std::optional<EngineShader>& getShader() {
     return shader;
   }
 
@@ -88,7 +89,7 @@ private:
 
   float deltaTime = 0.0f;
 
-  Shader shader;
+  std::optional<EngineShader> shader;
 };
 
 bool gameStart();
