@@ -2,6 +2,7 @@
 #include "../src/engine/Engine.hpp"
 #include "../src/rica.hpp"
 #include "player.hpp"
+#include "camera_controller.hpp"
 #include "raylib.h"
 #include <iostream>
 #include <memory>
@@ -11,48 +12,44 @@ const int screenHeight = 1080;
 
 class GameScene : public Scene {
 private:
-  std::shared_ptr<Player> player;
-  std::shared_ptr<Entity> cameraEntity;
-  std::shared_ptr<Entity> shaderEntity;
+   std::shared_ptr<Player> player;
+   std::shared_ptr<CameraController> cameraEntity;
+   std::shared_ptr<Entity> shaderEntity;
 
-  int timeLoc;
-  int resolutionLoc;
-  std::array<float, 2> resolution;
+   int timeLoc;
+   int resolutionLoc;
+   std::array<float, 2> resolution;
 
 public:
-  GameScene() {
-    cameraEntity = std::make_shared<Entity>();
-    auto cam3D = std::make_shared<Camera3DComponent>(Vector3{0.0f, 2.0f, 10.0f},
-                                                     130.0f, true);
-    cam3D->setTarget({0.0f, 0.0f, 0.0f});
-    cameraEntity->addComponent(cam3D);
-    this->createEntity(cameraEntity);
-    player = std::make_shared<Player>();
-    this->createEntity(player);
+   GameScene() {
+     cameraEntity = std::make_shared<CameraController>();
+     this->createEntity(cameraEntity);
+     player = std::make_shared<Player>();
+     this->createEntity(player);
 
-    auto& engineShader = engine.getShader();
+     auto& engineShader = engine.getShader();
 
-    engineShader = EngineShader({}, "raymarching.fs");
+     engineShader = EngineShader({}, "raymarching.fs");
 
-    timeLoc = engineShader->getShaderLocation("time");
-    resolutionLoc = engineShader->getShaderLocation("resolution");
+     timeLoc = engineShader->getShaderLocation("time");
+     resolutionLoc = engineShader->getShaderLocation("resolution");
 
-    resolution[0] = (float)screenWidth;
-    resolution[1] = (float)screenHeight;
+     resolution[0] = (float)screenWidth;
+     resolution[1] = (float)screenHeight;
 
-    engineShader->setShaderValue(resolutionLoc, resolution);
-  }
+     engineShader->setShaderValue(resolutionLoc, resolution);
+   }
 
-  ~GameScene() {
-  }
+   ~GameScene() {
+   }
 
-  void OnUpdate(float dt) override {
-    auto& engineShader = engine.getShader();
-    float time = (float)GetTime();
-    engineShader->setShaderValue(timeLoc, time);
-    if (player)
-      player->update(dt);
-  }
+   void OnUpdate(float dt) override {
+     auto& engineShader = engine.getShader();
+     float time = (float)GetTime();
+     engineShader->setShaderValue(timeLoc, time);
+     if (cameraEntity)
+       cameraEntity->update(dt);
+   }
 };
 
 bool gameStart() {
@@ -62,6 +59,8 @@ bool gameStart() {
 
   engine.sceneManager.setSceneLimit(10);
   engine.sceneManager.CreateScene<GameScene>(1);
+
+  render3Dsystem.setSkyColor({100,100,100, 100});
 
   return true;
 }

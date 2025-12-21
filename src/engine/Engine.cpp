@@ -1,6 +1,7 @@
 #include "Engine.hpp"
 
 #include "../rica.hpp"
+#include "Physic/Physic3D/Physic.hpp"
 #include "Render2D/Render2D.hpp"
 #include "Render3D/Render3D.hpp"
 #include "Var/Var.hpp"
@@ -240,6 +241,7 @@ int main() {
     // ==========================================================
     if(engine.is3Dmode()){
       render3Dsystem.update(currentScenePtr->getAllEntities());
+      physic3DSystem.update(currentScenePtr->getAllEntities(), engine.deltaTime);
     }
     else{
       collider2DSystem.update(currentScenePtr->getAllEntities());

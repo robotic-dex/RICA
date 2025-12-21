@@ -5,6 +5,7 @@ struct Component;
 class SpriteComponent;
 class TransformComponent;
 class Camera2DComponent;
+class Physic3DComponent;
 class Entity;
 class Player;
 class Terminal;
@@ -36,7 +37,7 @@ class AudioSystem;
 #include "ECS/Components/Mesh/Mesh.hpp"
 #include "ECS/Components/Transform/Transform2D/Transform.hpp"
 #include "ECS/Components/Transform/Transform3D/Transform3D.hpp"
-
+#include "ECS/Components/Physic/Physic3D/Physic3D.hpp"
 // Объекты ECS
 #include "ECS/Objects/Entity.hpp"
 
