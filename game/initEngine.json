@@ -1,0 +1,16 @@
+{
+    "rayLib":{
+         "windowTitle": "hello",
+
+         "resolution": {
+             "width": 1920,
+             "height": 1080
+         },
+
+         "maxFPS": 60,
+
+         "configurationFlags": [
+            "FLAG_FULLSCREEN_MODE"
+          ]
+    }
+}
